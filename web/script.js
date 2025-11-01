@@ -1,4 +1,4 @@
-// Smooth scrolling for navigation links
+// Smooth scrolling for hash links (same page)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -8,6 +8,19 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: 'smooth',
                 block: 'start'
             });
+        }
+    });
+});
+
+// Set active navigation link based on current page
+document.addEventListener('DOMContentLoaded', () => {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+            link.classList.add('active');
         }
     });
 });
@@ -142,18 +155,16 @@ function showNotification(message) {
     }, 3000);
 }
 
-// Hero button interactions
-document.querySelectorAll('.hero-buttons .btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        if (btn.classList.contains('btn-primary')) {
-            showNotification('Redirecting to purchase...');
-        } else {
-            // Scroll to features section
-            document.querySelector('#features').scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
-    });
+// Page transition feedback for CTAs
+document.querySelectorAll('.btn-primary').forEach(btn => {
+    if (btn.tagName === 'A') {
+        btn.addEventListener('click', (e) => {
+            // Only show notification for "Buy Now" type buttons
+            if (btn.textContent.includes('Buy') || btn.textContent.includes('Select')) {
+                showNotification('Loading...');
+            }
+        });
+    }
 });
 
 // Parallax effect for hero section
@@ -214,5 +225,6 @@ document.addEventListener('mousemove', (e) => {
 });
 
 // Log page load completion
-console.log('MacBook Pro landing page loaded successfully!');
-console.log('Interactive features enabled: smooth scrolling, animations, model selection');
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+console.log(`MacBook Pro ${currentPage} loaded successfully!`);
+console.log('Interactive features enabled: animations, model selection, page transitions');

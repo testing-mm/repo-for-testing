@@ -35,7 +35,16 @@ nav {
 .logo {
     font-size: 1.5rem;
     font-weight: 600;
+}
+
+.logo a {
+    text-decoration: none;
     color: #1d1d1f;
+    transition: color 0.3s;
+}
+
+.logo a:hover {
+    color: #0071e3;
 }
 
 .nav-links {
@@ -49,10 +58,26 @@ nav {
     color: #1d1d1f;
     font-size: 0.95rem;
     transition: color 0.3s;
+    position: relative;
 }
 
 .nav-links a:hover {
     color: #0071e3;
+}
+
+.nav-links a.active {
+    color: #0071e3;
+    font-weight: 600;
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #0071e3;
 }
 
 /* Hero Section */
@@ -106,6 +131,8 @@ nav {
     cursor: pointer;
     transition: all 0.3s;
     font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .btn-primary {
@@ -127,6 +154,12 @@ nav {
 .btn-secondary:hover {
     background-color: rgba(255, 255, 255, 0.1);
     transform: scale(1.05);
+}
+
+/* Page Content for multi-page layout */
+.page-content {
+    margin-top: 80px;
+    min-height: calc(100vh - 160px);
 }
 
 .price {
@@ -343,6 +376,88 @@ nav {
 .spec-item p {
     color: #6e6e73;
     margin-bottom: 0.5rem;
+}
+
+/* CTA Section */
+.cta-section {
+    margin-top: 4rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 18px;
+}
+
+.cta-section h3 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #1d1d1f;
+}
+
+.cta-section .btn-secondary {
+    color: #1d1d1f;
+    border-color: #1d1d1f;
+}
+
+.cta-section .btn-secondary:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Comparison Section */
+.comparison-section {
+    margin-top: 4rem;
+    padding: 3rem 0;
+}
+
+.comparison-section h3 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #1d1d1f;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.comparison-card {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 18px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.comparison-card h4 {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: #1d1d1f;
+}
+
+.comparison-card ul {
+    list-style: none;
+}
+
+.comparison-card li {
+    padding: 0.75rem 0;
+    color: #6e6e73;
+    border-bottom: 1px solid #e5e5e7;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.comparison-card li:last-child {
+    border-bottom: none;
+}
+
+.comparison-card li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #0071e3;
+    font-weight: bold;
 }
 
 /* Footer */
