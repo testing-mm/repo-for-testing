@@ -1,0 +1,166 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+
+export async function getStaticPaths({ paginate }) {
+  const allPosts = await getCollection('blog');
+  const sortedPosts = allPosts.sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+
+  return paginate(sortedPosts, { pageSize: 6 });
+}
+
+const { page } = Astro.props;
+const pageTitle = page.currentPage === 1 ? 'Blog' : `Blog - Strona ${page.currentPage}`;
+const pageDescription = 'Najnowsze artykuły o pielęgnacji, urodzie i kosmetykach naturalnych.';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <div class="blog-container">
+    <div class="blog-header">
+      <h1>Nasz Blog</h1>
+      <p class="subtitle">Porady, wskazówki i najnowsze trendy w świecie kosmetyków</p>
+    </div>
+
+    <div class="blog-grid">
+      {page.data.map((post) => (
+        <BlogCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          heroImage={post.data.heroImage}
+          slug={post.slug}
+          tags={post.data.tags}
+        />
+      ))}
+    </div>
+
+    {(page.url.prev || page.url.next) && (
+      <nav class="pagination" aria-label="Nawigacja stronicowania">
+        <div class="pagination-container">
+          {page.url.prev ? (
+            <a href={page.url.prev} class="pagination-link prev">
+              ← Poprzednia strona
+            </a>
+          ) : (
+            <span class="pagination-link disabled">← Poprzednia strona</span>
+          )}
+
+          <div class="page-info">
+            Strona {page.currentPage} z {page.lastPage}
+          </div>
+
+          {page.url.next ? (
+            <a href={page.url.next} class="pagination-link next">
+              Następna strona →
+            </a>
+          ) : (
+            <span class="pagination-link disabled">Następna strona →</span>
+          )}
+        </div>
+      </nav>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .blog-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .blog-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #d4a5c3 0%, #9b7fa8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: #666;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .pagination {
+    margin-top: 4rem;
+  }
+
+  .pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .pagination-link {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .pagination-link:not(.disabled) {
+    background: linear-gradient(135deg, #d4a5c3 0%, #9b7fa8 100%);
+    color: white;
+  }
+
+  .pagination-link:not(.disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(155, 127, 168, 0.3);
+  }
+
+  .pagination-link.disabled {
+    background: #f0f0f0;
+    color: #999;
+    cursor: not-allowed;
+  }
+
+  .page-info {
+    font-size: 1rem;
+    color: #666;
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .blog-header h1 {
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .pagination-container {
+      flex-direction: column;
+    }
+
+    .pagination-link {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
