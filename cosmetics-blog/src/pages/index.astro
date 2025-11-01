@@ -1,0 +1,214 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title="Polskie Kosmetyki - Naturalna Uroda"
+  description="Odkryj najlepsze polskie kosmetyki naturalne. Blog o pielęgnacji, urodzie i zdrowej skórze."
+>
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Witaj w świecie polskich kosmetyków</h1>
+      <p class="hero-description">
+        Naturalna pielęgnacja, piękno i uroda w zasięgu ręki
+      </p>
+      <a href="/blog/1" class="cta-button">Odkryj nasze artykuły</a>
+    </div>
+  </div>
+
+  <section class="featured-section">
+    <div class="section-container">
+      <h2>Najnowsze artykuły</h2>
+      <div class="blog-grid">
+        {recentPosts.map((post) => (
+          <BlogCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            heroImage={post.data.heroImage}
+            slug={post.slug}
+            tags={post.data.tags}
+          />
+        ))}
+      </div>
+      <div class="see-all">
+        <a href="/blog/1" class="see-all-link">Zobacz wszystkie artykuły →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="section-container">
+      <h2>Dlaczego warto nas czytać?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🌿</div>
+          <h3>Naturalne składniki</h3>
+          <p>Promujemy kosmetyki oparte na naturalnych składnikach</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💄</div>
+          <h3>Porady ekspertów</h3>
+          <p>Profesjonalne wskazówki dotyczące pielęgnacji</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3>Nowości i trendy</h3>
+          <p>Bądź na bieżąco z najnowszymi trendami beauty</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    background: linear-gradient(135deg, #d4a5c3 0%, #9b7fa8 100%);
+    color: white;
+    padding: 6rem 1rem;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .hero-description {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: white;
+    color: #9b7fa8;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  .featured-section,
+  .features {
+    padding: 4rem 1rem;
+  }
+
+  .section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #2d1b35;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .see-all {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .see-all-link {
+    color: #9b7fa8;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .see-all-link:hover {
+    color: #d4a5c3;
+  }
+
+  .features {
+    background: #f9f9f9;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h3 {
+    color: #2d1b35;
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+  }
+
+  .feature-card p {
+    color: #666;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 4rem 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
